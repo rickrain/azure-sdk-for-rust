@@ -93,11 +93,12 @@ pub struct HeadPathResponse {
 impl HeadPathResponse {
     pub async fn try_from(response: HttpResponse) -> Result<Self, crate::Error> {
         let headers = response.headers();
+
         Ok(Self {
             common_storage_response_headers: headers.try_into()?,
             etag: etag_from_headers(headers)?,
             last_modified: last_modified_from_headers(headers)?,
-            properties: headers.try_into()?,
+            properties: headers.try_into().ok(),
         })
     }
 }
