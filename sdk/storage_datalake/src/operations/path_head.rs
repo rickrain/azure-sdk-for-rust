@@ -87,18 +87,17 @@ pub struct HeadPathResponse {
     pub common_storage_response_headers: CommonStorageResponseHeaders,
     pub etag: String,
     pub last_modified: DateTime<Utc>,
-    pub properties: Option<Properties>,
+    pub properties: Properties,
 }
 
 impl HeadPathResponse {
     pub async fn try_from(response: HttpResponse) -> Result<Self, crate::Error> {
-        let (_status_code, headers, _pinned_stream) = response.deconstruct();
-
+        let headers = response.headers();
         Ok(Self {
-            common_storage_response_headers: (&headers).try_into()?,
-            etag: etag_from_headers(&headers)?,
-            last_modified: last_modified_from_headers(&headers)?,
-            properties: (&headers).try_into().ok(),
+            common_storage_response_headers: headers.try_into()?,
+            etag: etag_from_headers(headers)?,
+            last_modified: last_modified_from_headers(headers)?,
+            properties: headers.try_into()?,
         })
     }
 }
