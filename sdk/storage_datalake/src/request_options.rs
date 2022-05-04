@@ -56,6 +56,34 @@ impl AppendToUrlQuery for PathGetPropertiesAction {
 }
 
 #[derive(Debug, Clone)]
+pub enum FsAction {
+    None,
+    Execute,
+    Write,
+    WriteExecute,
+    Read,
+    ReadExecute,
+    ReadWrite,
+    ReadWriteExecute,
+}
+
+impl AppendToUrlQuery for FsAction {
+    fn append_to_url_query(&self, url: &mut url::Url) {
+        let fs_action = match self {
+            Self::None => "---",
+            Self::Execute => "--x",
+            Self::Write => "-w-",
+            Self::WriteExecute => "-wx",
+            Self::Read => "r--",
+            Self::ReadExecute => "r-x",
+            Self::ReadWrite => "rw-",
+            Self::ReadWriteExecute => "rwx",
+        };
+        url.query_pairs_mut().append_pair("fsAction", fs_action);
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Recursive(bool);
 
 impl AppendToUrlQuery for Recursive {

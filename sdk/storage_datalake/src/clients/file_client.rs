@@ -123,6 +123,12 @@ impl FileClient {
             .action(PathGetPropertiesAction::GetStatus)
     }
 
+    pub fn check_access(&self, fs_action: FsAction) -> HeadPathBuilder<Self> {
+        HeadPathBuilder::new(self.clone(), self.file_system_client.context.clone())
+            .action(PathGetPropertiesAction::CheckAccess)
+            .fs_action(fs_action)
+    }
+
     pub fn set_properties(&self, properties: Properties) -> PatchPathBuilder<Self> {
         PatchPathBuilder::new(self.clone(), self.file_system_client.context.clone())
             .properties(properties)
