@@ -1,4 +1,5 @@
 #![cfg(feature = "mock_transport_framework")]
+use azure_storage_datalake::request_options::FsAction;
 use azure_storage_datalake::Properties;
 use std::{assert_eq, assert_ne, error::Error};
 
@@ -222,6 +223,13 @@ async fn file_get_properties() -> Result<(), Box<dyn Error + Send + Sync>> {
         file_acl.acl,
         Some("user::rw-,group::r--,other::---".to_string())
     );
+
+    // Check access
+    let file_access = file_client
+        .check_access(FsAction::Read)
+        .into_future()
+        .await?;
+    //println!("{:?}", file_access);
 
     // Cleanup
     file_system_client.delete().into_future().await?;

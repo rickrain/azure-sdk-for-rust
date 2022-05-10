@@ -79,7 +79,7 @@ impl AppendToUrlQuery for FsAction {
             Self::ReadWrite => "rw-",
             Self::ReadWriteExecute => "rwx",
         };
-        url.query_pairs_mut().append_pair("fsAction", fs_action);
+        url.query_pairs_mut().append_pair("fsaction", fs_action);
     }
 }
 
